@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import Person from "./Person";
+import "./App.css";
+import ContextAPI from "./ContextAPI";
+// import Data from "./data";
 
 function App() {
+  // const { products } = Data;
+
+  const [Data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+      <ContextAPI />
+      <div className="App">
+        {Data.map((product) => (
+          <div className="row" key={product.id}>
+            <p>{product.name}</p>
+            <p>{product.email}</p>
+          </div>
+        ))}
+      </div>
+      <br />
+      <Counter name={"Roni"} count={"1"} />
+      <Person Data={Data} />
+    </>
+  );
+}
+function Counter(props) {
+  const { name, count } = props;
+  return (
+    <div>
+      Hello:{name} and {count}
     </div>
   );
 }
